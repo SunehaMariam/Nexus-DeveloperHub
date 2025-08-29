@@ -11,6 +11,13 @@ export interface User {
   createdAt: string;
 }
 
+export interface Meeting {
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+  status: 'pending' | 'confirmed' | 'declined';
+}
 export interface Entrepreneur extends User {
   role: 'entrepreneur';
   startupName: string;

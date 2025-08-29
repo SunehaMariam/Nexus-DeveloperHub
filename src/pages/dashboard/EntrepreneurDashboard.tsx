@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Users, Bell, Calendar, TrendingUp, AlertCircle, PlusCircle } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
+import { Card, CardBody, CardHeader } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { CollaborationRequestCard } from '../../components/collaboration/CollaborationRequestCard';
 import { InvestorCard } from '../../components/investor/InvestorCard';
@@ -9,48 +10,32 @@ import { useAuth } from '../../context/AuthContext';
 import { CollaborationRequest } from '../../types';
 import { getRequestsForEntrepreneur } from '../../data/collaborationRequests';
 import { investors } from '../../data/users';
-import { useMeetings } from "../context/MeetingsContext";
-import { Card, CardBody, CardHeader } from '../../components/ui/Card';
 
 export const EntrepreneurDashboard: React.FC = () => {
   const { user } = useAuth();
   const [collaborationRequests, setCollaborationRequests] = useState<CollaborationRequest[]>([]);
-  const [recommendedInvestors] = useState(investors.slice(0, 3));
-
-  // ✅ pull confirmedMeetings and confirmMeeting helper from context
-  const { confirmedMeetings, confirmMeeting } = useMeetings();
-
+  const recommendedInvestors = investors.slice(0, 3); // Top 3 recommended investors (mocked)   
+  
   useEffect(() => {
     if (user) {
+      // Load collaboration requests
       const requests = getRequestsForEntrepreneur(user.id);
       setCollaborationRequests(requests);
     }
   }, [user]);
-
-  // ✅ Update both local requests + global meetings context
+  
   const handleRequestStatusUpdate = (requestId: string, status: 'accepted' | 'rejected') => {
-    setCollaborationRequests(prevRequests =>
-      prevRequests.map(req =>
+    setCollaborationRequests(prevRequests => 
+      prevRequests.map(req => 
         req.id === requestId ? { ...req, status } : req
       )
     );
-
-    if (status === 'accepted') {
-      const acceptedRequest = collaborationRequests.find(req => req.id === requestId);
-      if (acceptedRequest) {
-        confirmMeeting({
-          id: parseInt(acceptedRequest.id), // adjust type if needed
-          sender: (acceptedRequest.investorId ?? "Unknown Investor"),
-          dateTime: new Date().toISOString(), // or slot picked from calendar
-        });
-      }
-    }
   };
-
+  
   if (!user) return null;
-
+  
   const pendingRequests = collaborationRequests.filter(req => req.status === 'pending');
-
+  
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
@@ -58,19 +43,27 @@ export const EntrepreneurDashboard: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">Welcome, {user.name}</h1>
           <p className="text-gray-600">Here's what's happening with your startup today</p>
         </div>
-
+        
         <Link to="/investors">
-          <Button leftIcon={<PlusCircle size={18} />}>
+          <Button
+            leftIcon={<PlusCircle size={18} />}
+          >
             Find Investors
           </Button>
         </Link>
+        <Link to="/dashboard/video">
+  <button className="px-4 py-2 rounded-lg bg-blue-600 text-white">Video Call</button>
+</Link>
+
         <Link to="/dashboard/calendar">
-          <Button leftIcon={<Calendar size={18} />}>
-            View Calendar
+          <Button
+            leftIcon={<PlusCircle size={18} />}
+          >
+            view calendar
           </Button>
         </Link>
       </div>
-
+      
       {/* Summary cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="bg-primary-50 border border-primary-100">
@@ -86,7 +79,7 @@ export const EntrepreneurDashboard: React.FC = () => {
             </div>
           </CardBody>
         </Card>
-
+        
         <Card className="bg-secondary-50 border border-secondary-100">
           <CardBody>
             <div className="flex items-center">
@@ -102,7 +95,7 @@ export const EntrepreneurDashboard: React.FC = () => {
             </div>
           </CardBody>
         </Card>
-
+        
         <Card className="bg-accent-50 border border-accent-100">
           <CardBody>
             <div className="flex items-center">
@@ -111,14 +104,12 @@ export const EntrepreneurDashboard: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-accent-700">Upcoming Meetings</p>
-                <h3 className="text-xl font-semibold text-accent-900">
-                  {confirmedMeetings.length}
-                </h3>
+                <h3 className="text-xl font-semibold text-accent-900">2</h3>
               </div>
             </div>
           </CardBody>
         </Card>
-
+        
         <Card className="bg-success-50 border border-success-100">
           <CardBody>
             <div className="flex items-center">
@@ -133,7 +124,7 @@ export const EntrepreneurDashboard: React.FC = () => {
           </CardBody>
         </Card>
       </div>
-
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Collaboration requests */}
         <div className="lg:col-span-2 space-y-4">
@@ -142,7 +133,7 @@ export const EntrepreneurDashboard: React.FC = () => {
               <h2 className="text-lg font-medium text-gray-900">Collaboration Requests</h2>
               <Badge variant="primary">{pendingRequests.length} pending</Badge>
             </CardHeader>
-
+            
             <CardBody>
               {collaborationRequests.length > 0 ? (
                 <div className="space-y-4">
@@ -166,7 +157,7 @@ export const EntrepreneurDashboard: React.FC = () => {
             </CardBody>
           </Card>
         </div>
-
+        
         {/* Recommended investors */}
         <div className="space-y-4">
           <Card>
@@ -176,7 +167,7 @@ export const EntrepreneurDashboard: React.FC = () => {
                 View all
               </Link>
             </CardHeader>
-
+            
             <CardBody className="space-y-4">
               {recommendedInvestors.map(investor => (
                 <InvestorCard
