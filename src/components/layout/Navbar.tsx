@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Menu, X, Bell, MessageCircle, User, LogOut, Building2, CircleDollarSign } from 'lucide-react';
+import { Menu, X, Bell, MessageCircle, User, LogOut, Building2, CircleDollarSign,Video,Calendar } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
@@ -45,6 +45,21 @@ export const Navbar: React.FC = () => {
       text: 'Notifications',
       path: user ? '/notifications' : '/login',
     },
+     {
+    icon: <CircleDollarSign size={18} />, // 💳 Payment Icon
+    text: 'Payments',
+    path: user ? '/dashboard/payment' : '/login', // ✅ new route
+  },
+   {
+    icon: <Video size={18} />,
+    text: 'Video Call',
+    path: user ? '/dashboard/video-call' : '/login',
+  },
+  {
+    icon: <Calendar size={18} />,
+    text: 'Calendar',
+    path: user ? '/dashboard/calendar' : '/login',
+  },
     {
       icon: <User size={18} />,
       text: 'Profile',

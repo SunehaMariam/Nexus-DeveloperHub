@@ -10,7 +10,16 @@ export interface User {
   isOnline?: boolean;
   createdAt: string;
 }
-
+// src/types/payment.ts
+export type Transaction = {
+  id: string;
+  type: "Deposit" | "Withdraw" | "Transfer" | "Funding";
+  amount: number;
+  sender: string;
+  receiver?: string;
+  status: "Completed" | "Pending" | "Failed";
+  date: string;
+};
 export interface Meeting {
   id: string;
   title: string;

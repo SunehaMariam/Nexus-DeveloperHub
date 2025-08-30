@@ -51,17 +51,17 @@ export const EntrepreneurDashboard: React.FC = () => {
             Find Investors
           </Button>
         </Link>
-        <Link to="/dashboard/video">
+        {/* <Link to="/dashboard/video">
   <button className="px-4 py-2 rounded-lg bg-blue-600 text-white">Video Call</button>
-</Link>
+</Link> */}
 
-        <Link to="/dashboard/calendar">
+        {/* <Link to="/dashboard/calendar">
           <Button
             leftIcon={<PlusCircle size={18} />}
           >
             view calendar
           </Button>
-        </Link>
+        </Link> */}
       </div>
       
       {/* Summary cards */}

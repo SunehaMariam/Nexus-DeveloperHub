@@ -6,7 +6,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 
 // Auth Pages
-import { LoginPage } from "./pages/auth/LoginPage";
+import LoginPage from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 
 // Dashboard Pages
@@ -31,7 +31,7 @@ import Calendar from "./pages/Calendar";
 // Chat Pages
 import { ChatPage } from "./pages/chat/ChatPage";
 import VideoCall from "./pages/VideoCall";
-
+import PaymentPage from "./pages/PaymentPage";
 function App() {
 
   return (
@@ -47,9 +47,9 @@ function App() {
             <Route path="/dashboard" element={<DashboardLayout />}>
               {/* Entrepreneur dashboard */}
               <Route path="entrepreneur" element={<EntrepreneurDashboard />} />
-             <Route path="calendar" element={<Calendar />} />
-             <Route path="video" element={<VideoCall />} />
-
+             <Route path="/dashboard/calendar" element={<Calendar />} />
+                     <Route path="/dashboard/video-call" element={<VideoCall/>} />
+ <Route path="/dashboard/payment" element={<PaymentPage />} />
               {/* Investor dashboard */}
               <Route path="investor" element={<InvestorDashboard />} />
             </Route>

@@ -60,7 +60,39 @@ export const ChatPage: React.FC = () => {
   };
   
   if (!currentUser) return null;
-  
+
+
+interface ChatMessageProps {
+  message: Message;
+  isCurrentUser: boolean;
+}
+
+ const ChatMessage: React.FC<ChatMessageProps> = ({ message, isCurrentUser }) => {
+  return (
+    <div
+      className={`flex mb-2 ${
+        isCurrentUser ? "justify-end" : "justify-start"
+      }`}
+    >
+      <div
+        className={`max-w-xs md:max-w-md px-4 py-2 rounded-2xl shadow-sm ${
+          isCurrentUser
+            ? "bg-blue-600 text-white rounded-br-none"
+            : "bg-gray-200 text-gray-900 rounded-bl-none"
+        }`}
+      >
+        <p className="text-sm">{message.content}</p>
+        <span className="block text-[10px] mt-1 opacity-70 text-right">
+          {new Date(message.timestamp).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
+      </div>
+    </div>
+  );
+};
+
   return (
     <div className="flex h-[calc(100vh-4rem)] bg-white border border-gray-200 rounded-lg overflow-hidden animate-fade-in">
       {/* Conversations sidebar */}
@@ -108,6 +140,7 @@ export const ChatPage: React.FC = () => {
                   aria-label="Video call"
                 >
                   <Video size={18} />
+                    
                 </Button>
                 
                 <Button
@@ -122,28 +155,29 @@ export const ChatPage: React.FC = () => {
             </div>
             
             {/* Messages container */}
-            <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
-              {messages.length > 0 ? (
-                <div className="space-y-4">
-                  {messages.map(message => (
-                    <ChatMessage
-                      key={message.id}
-                      message={message}
-                      isCurrentUser={message.senderId === currentUser.id}
-                    />
-                  ))}
-                  <div ref={messagesEndRef} />
-                </div>
-              ) : (
-                <div className="h-full flex flex-col items-center justify-center">
-                  <div className="bg-gray-100 p-4 rounded-full mb-4">
-                    <MessageCircle size={32} className="text-gray-400" />
-                  </div>
-                  <h3 className="text-lg font-medium text-gray-700">No messages yet</h3>
-                  <p className="text-gray-500 mt-1">Send a message to start the conversation</p>
-                </div>
-              )}
-            </div>
+<div className="flex-1 p-4 overflow-y-auto bg-gray-50">
+  {messages.length > 0 ? (
+    <div className="space-y-3">
+      {messages.map((message) => (
+        <ChatMessage
+          key={message.id}
+          message={message}
+          isCurrentUser={message.senderId === currentUser.id}
+        />
+      ))}
+      <div ref={messagesEndRef} />
+    </div>
+  ) : (
+    <div className="h-full flex flex-col items-center justify-center">
+      <div className="bg-gray-100 p-4 rounded-full mb-4">
+        <MessageCircle size={32} className="text-gray-400" />
+      </div>
+      <h3 className="text-lg font-medium text-gray-700">No messages yet</h3>
+      <p className="text-gray-500 mt-1">Send a message to start the conversation</p>
+    </div>
+  )}
+</div>
+
             
             {/* Message input */}
             <div className="border-t border-gray-200 p-4">
@@ -178,6 +212,7 @@ export const ChatPage: React.FC = () => {
                 </Button>
               </form>
             </div>
+            
           </>
         ) : (
           <div className="h-full flex flex-col items-center justify-center p-4">
